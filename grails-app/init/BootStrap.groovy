@@ -1,15 +1,17 @@
 import twitter4j.*
 import twitter4j.api.*
 import twitter4j.auth.AccessToken
+import twitterpeople.TwitterProxyService
 
 
 class BootStrap {
 
-    Twitter twitter
+    TwitterProxyService twitterProxyService
 
     def init = { servletContext ->
-        User jagedn = twitter.showUser("@jagedn")
-        println jagedn.description
+
+        twitterProxyService.createPerson("jagedn")
+
     }
 
     def destroy = {

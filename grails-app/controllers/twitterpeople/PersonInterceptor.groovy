@@ -8,27 +8,13 @@ import twitter4j.User
  */
 class PersonInterceptor {
 
-    Twitter twitter
+    TwitterProxyService twitterProxyService
 
     boolean before(){
 
         switch( params.action ){
             case 'show':
-                if( !Person.get(params.id) ){
-                    User user = twitter.showUser("@${params.id}")
-                    if( user ){
-                        Person add = new Person(user.properties)
-                        add.id = params.id
-                        if( add.validate() )
-                            add.save(flush:true)
-                        else{
-                            println add.errors
-                            return false
-                        }
-                    }
-                }
-                break
-
+                return twitterProxyService.createPerson(params.id)
         }
 
         true

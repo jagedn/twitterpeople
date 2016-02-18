@@ -1,0 +1,19 @@
+= TwitterPeople, Grails proxy de usuarios de Twitter
+Jorge Aguilera;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+
+TwitterPeople es un simple ejemplo de cómo usar pruebas unitarias de servicios
+REST y usarlas para autodocumentarlas.
+
+== People
+
+El único recurso disponible en TwitterPeople es un Person que contiene
+un subconjunto de atributos de un usuario de Twitter
+
+include::{snippets}/people/curl-request.adoc[]
+
+include::{snippets}/people/http-request.adoc[]
+
+include::{snippets}/people/http-response.adoc[]

@@ -13,6 +13,12 @@ buildscript {
     }
 }
 
+//jorge 2
+plugins {
+    id "org.asciidoctor.convert" version "1.5.2"
+}
+
+
 version "0.1"
 group "twitterpeople"
 
@@ -24,7 +30,34 @@ apply plugin:"org.grails.plugins.views-json"
 ext {
     grailsVersion = project.grailsVersion
     gradleWrapperVersion = project.gradleWrapperVersion
+
+    // jorge 2
+    springRestdocsVersion = '1.1.0.M1'
+    snippetsDir = file('build/generated-snippets')
 }
+
+// jorge 2
+test {
+    outputs.dir snippetsDir
+}
+
+// jorge 3
+integrationTest{
+    outputs.dir snippetsDir
+
+    systemProperty 'twitter4j.oauth.consumerKey',"${consumerKey}"
+    systemProperty 'twitter4j.oauth.consumerSecret',"${consumerSecret}"
+    systemProperty 'twitter4j.oauth.accessToken',"${accessToken}"
+    systemProperty 'twitter4j.oauth.accessTokenSecret',"${secretToken}"
+}
+
+// jorge 2
+asciidoctor {
+    attributes 'snippets': snippetsDir
+    inputs.dir snippetsDir
+    dependsOn integrationTest
+}
+
 
 repositories {
     mavenLocal()
@@ -70,6 +103,11 @@ dependencies {
     //jorge
     compile "org.twitter4j:twitter4j-core:4.0.4"
 
+    // jorge 2
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile "org.springframework.restdocs:spring-restdocs-core:$springRestdocsVersion"
+    testCompile "org.springframework.restdocs:spring-restdocs-restassured:$springRestdocsVersion"
+
 }
 
 task wrapper(type: Wrapper) {
@@ -86,3 +124,10 @@ bootRun {
     ]
 }
 
+// jorge 2
+jar {
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
+}
