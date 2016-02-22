@@ -10,3 +10,11 @@ le solicitan nuevos identificadores la aplicación buscará si ya existe el recu
 en la base de datos y si no existe acudirá a Twitter a recuperarlo. Si a su vez, existe en
 Twitter creará un Person en base a los atributos que recupera y a partir de entonces
 ya estará disponbile para futuras peticiones.
+
+
+# Blog
+
+Este proyecto es parte de unos post donde se explica cómo usar TestDriven para documentar 
+tus servicios REST en link:http://pvidasoftware.github.io/blog/blog/2016/twitterpeople_1_2.html[Blog]
+
+
