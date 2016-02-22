@@ -15,6 +15,6 @@ ya estará disponbile para futuras peticiones.
 # Blog
 
 Este proyecto es parte de unos post donde se explica cómo usar TestDriven para documentar 
-tus servicios REST en link:http://pvidasoftware.github.io/blog/blog/2016/twitterpeople_1_2.html[este blog]
+tus servicios REST en link:http://pvidasoftware.github.io/blog/blog/2016/twitterpeople_1_2.html[Blog]
 
 
