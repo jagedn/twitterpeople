@@ -1,9 +1,12 @@
 package twitterpeople
 
 import com.jayway.restassured.builder.RequestSpecBuilder
+import com.jayway.restassured.specification.RequestSpecification
 import grails.test.mixin.integration.Integration
 import org.junit.ClassRule
 import org.springframework.restdocs.JUnitRestDocumentation
+import org.springframework.restdocs.ManualRestDocumentation
+import org.springframework.restdocs.payload.ResponseFieldsSnippet
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -11,6 +14,11 @@ import static com.jayway.restassured.RestAssured.given
 import static org.hamcrest.CoreMatchers.equalTo
 import static org.hamcrest.CoreMatchers.is
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration
 import static org.springframework.restdocs.restassured.operation.preprocess.RestAssuredPreprocessors.modifyUris
@@ -18,19 +26,18 @@ import static org.springframework.restdocs.restassured.operation.preprocess.Rest
 @Integration
 class PeopleSpec extends Specification {
 
-    @ClassRule
-    @Shared
-    JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
+    final ManualRestDocumentation restDocumentation = new ManualRestDocumentation('build/generated-snippets')
 
-    @Shared
-    def documentationSpec = new RequestSpecBuilder()
-            .addFilter(documentationConfiguration(restDocumentation)).build();
+    private RequestSpecification documentationSpec
 
-
-    def setup() {
+    void setup() {
+        this.documentationSpec = new RequestSpecBuilder()
+                .addFilter(documentationConfiguration(restDocumentation)).build()
+        this.restDocumentation.beforeTest(getClass(), specificationContext.currentSpec.name)
     }
 
-    def cleanup() {
+    void cleanup() {
+        this.restDocumentation.afterTest()
     }
 
     void "test index"() {
@@ -58,13 +65,24 @@ class PeopleSpec extends Specification {
     void "test person #username"() {
 
         given:
+        def fields = [
+                fieldWithPath('id').description('user name'),
+                fieldWithPath('description').description(''),
+                fieldWithPath('followersCount').description('how many followers'),
+                fieldWithPath('friendsCount').description('how many friends'),
+                fieldWithPath('location').description(''),
+        ]
+
         def request = given(documentationSpec)
                 .accept("application/json")
                 .filter(document("people/${document}",
                 preprocessRequest(modifyUris()
                         .scheme("http")
                         .host("localhost")
-                        .removePort())))
+                        .removePort()),
+                preprocessResponse(prettyPrint()),
+                new ResponseFieldsSnippet(fields))
+        )
         when:
         def then = request
                 .when()

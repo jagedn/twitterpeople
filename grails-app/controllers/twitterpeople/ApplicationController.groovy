@@ -10,6 +10,10 @@ class ApplicationController implements PluginManagerAware {
     GrailsPluginManager pluginManager
 
     def index() {
+
+        params.kk = 'una kk'
+        println params
+
         [grailsApplication: grailsApplication, pluginManager: pluginManager]
     }
 }

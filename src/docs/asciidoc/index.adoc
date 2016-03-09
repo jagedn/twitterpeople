@@ -30,6 +30,8 @@ include::{snippets}/people/http-response.adoc[]
 Para obtener los datos de un Person utilizaremos su nick como identificador (en lugar
 del Id de Twitter):
 
+include::{snippets}/people/person1/response-fields.adoc[]
+
 include::{snippets}/people/person1/curl-request.adoc[]
 
 include::{snippets}/people/person1/http-request.adoc[]
