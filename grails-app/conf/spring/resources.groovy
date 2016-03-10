@@ -1,4 +1,5 @@
 import twitter4j.TwitterFactory
+import grails.rest.render.hal.*
 
 // Place your Spring DSL code here
 beans = {
@@ -8,4 +9,7 @@ beans = {
         bean.singleton = true
     }
 
+    halPeopleRenderer(HalJsonRenderer, twitterpeople.Person)
+
+    halPeopleCollectionRenderer(HalJsonCollectionRenderer, twitterpeople.Person)
 }

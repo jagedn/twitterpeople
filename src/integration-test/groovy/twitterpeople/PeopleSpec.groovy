@@ -10,6 +10,7 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet
 import spock.lang.Shared
 import spock.lang.Specification
 
+import static com.jayway.restassured.RestAssured.get
 import static com.jayway.restassured.RestAssured.given
 import static org.hamcrest.CoreMatchers.equalTo
 import static org.hamcrest.CoreMatchers.is
@@ -71,6 +72,7 @@ class PeopleSpec extends Specification {
                 fieldWithPath('followersCount').description('how many followers'),
                 fieldWithPath('friendsCount').description('how many friends'),
                 fieldWithPath('location').description(''),
+                fieldWithPath('someFriends').description('some friends'),
         ]
 
         def request = given(documentationSpec)
@@ -97,6 +99,32 @@ class PeopleSpec extends Specification {
         where:
         username | document
         'jagedn' | "person1"
+    }
+
+    void "test with HATEOAS a person #username"() {
+
+        given:
+        def request = given(documentationSpec)
+                .accept("application/hal+json")
+                .filter(document("people-hateoas",
+                preprocessRequest(modifyUris()
+                        .scheme("http")
+                        .host("localhost")
+                        .removePort()),
+                preprocessResponse(prettyPrint()))
+        )
+        when:
+        def then = request
+                .when()
+                .port(8080)
+                .get("/people/jagedn")
+                .then()
+
+        then:
+        then.assertThat().statusCode(is(200));
+        then.assertThat().content('_links.self.href', is('http://localhost:8080/people/jagedn'))
+
+
     }
 
 }

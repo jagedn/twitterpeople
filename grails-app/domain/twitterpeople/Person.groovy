@@ -2,7 +2,7 @@ package twitterpeople
 
 import grails.rest.Resource
 
-@Resource(uri='/people', formats=['json'], readOnly=true)
+@Resource(uri='/people', formats=['json','hal'], readOnly=true)
 class Person {
 
     static constraints = {
@@ -20,4 +20,5 @@ class Person {
     int friendsCount
     String location
 
+    static hasMany = [ someFriends : Person ]
 }

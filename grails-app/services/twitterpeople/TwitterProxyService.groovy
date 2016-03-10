@@ -9,21 +9,36 @@ class TwitterProxyService {
 
     Twitter twitter
 
-    boolean createPerson( String id) {
-        if( !Person.get(id) ){
-            User user = twitter.showUser("@${id}")
-            if( user ){
-                Person add = new Person(user.properties)
-                add.id = id
-                if( add.validate() )
-                    add.save(flush:true)
+    Person createPerson( id ) {
+        Person add
+        User user
+        if( "$id".isNumber() == false ){
+            add=Person.get(id)
+            if(add){
+               return add
+            }
+            user = twitter.showUser("@${id}")
+        }else{
+            user = twitter.showUser( id as long)
+        }
 
-                else{
-                    println add.errors
-                    return false
+        if( user ){
+            add = new Person(user.properties)
+            add.id = id
+            if( add.validate() ) {
+                long [] friendsIds = twitter.friendsFollowers().getFriendsIDs(user.id,-1,2).IDs;
+                friendsIds.each{ friendId->
+                    Person friend = createPerson(friendId)
+                    if( friend ){
+                        add.addToSomeFriends(friend)
+                    }
                 }
+                add.save(flush: true)
+            }
+            else{
+                println add.errors
             }
         }
-        return true
+        add
     }
 }

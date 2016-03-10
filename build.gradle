@@ -53,7 +53,10 @@ integrationTest{
 
 // jorge 2
 asciidoctor {
-    attributes 'snippets': snippetsDir
+    attributes 'snippets': snippetsDir,
+            'source-highlighter':'prettify',
+            'toc':'left',
+            'setanchors':'true'
     inputs.dir snippetsDir
     dependsOn integrationTest
 }

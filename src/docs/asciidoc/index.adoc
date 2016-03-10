@@ -4,6 +4,8 @@ Jorge Aguilera;
 :icons: font
 :source-highlighter: highlightjs
 
+== TwitterPeople
+
 TwitterPeople es un simple ejemplo de cómo usar pruebas unitarias de servicios
 REST y usarlas para autodocumentarlas.
 
@@ -14,6 +16,7 @@ le solicitan nuevos identificadores la aplicación buscará si ya existe el recu
 en la base de datos y si no existe acudirá a Twitter a recuperarlo. Si a su vez, existe en
 Twitter creará un Person en base a los atributos que recupera y a partir de entonces
 ya estará disponbile para futuras peticiones.
+
 
 == People
 
@@ -32,9 +35,18 @@ del Id de Twitter):
 
 include::{snippets}/people/person1/response-fields.adoc[]
 
+=== JSON
+
 include::{snippets}/people/person1/curl-request.adoc[]
 
 include::{snippets}/people/person1/http-request.adoc[]
 
 include::{snippets}/people/person1/http-response.adoc[]
 
+=== HATEOAS
+
+Así mismo podemos realizar la consulta usando HATEOAS:
+
+include::{snippets}/people-hateoas/curl-request.adoc[]
+
+include::{snippets}/people-hateoas/http-response.adoc[]
