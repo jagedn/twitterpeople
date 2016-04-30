@@ -24,7 +24,7 @@ class SimpleSpec extends Specification{
 
     }
 
-    void "test user #username"(){
+    void "test user #username "(){
 
         given:
         RestBuilder rest = new RestBuilder()

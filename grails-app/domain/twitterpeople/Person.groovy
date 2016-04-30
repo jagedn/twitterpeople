@@ -2,6 +2,8 @@ package twitterpeople
 
 import grails.rest.Resource
 
+import javax.validation.constraints.Size
+
 @Resource(uri='/people', formats=['json','hal'], readOnly=true)
 class Person {
 
@@ -15,10 +17,12 @@ class Person {
     }
 
     String id   // usaremos el name en lugar del id de twitter
+
+    @Size(min = 8)
     String description
     int followersCount
     int friendsCount
     String location
 
-    static hasMany = [ someFriends : Person ]
+    //Date dateCreated
 }

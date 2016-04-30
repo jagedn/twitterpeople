@@ -14,7 +14,11 @@ class PersonInterceptor {
 
         switch( params.action ){
             case 'show':
-                return twitterProxyService.createPerson(params.id)
+                Person add = twitterProxyService.createPerson(params.id)
+                if (add && add.validate()) {
+                    add.save(flush: true)
+                }
+            break
         }
 
         true

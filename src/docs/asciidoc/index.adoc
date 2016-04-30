@@ -3,6 +3,7 @@ Jorge Aguilera;
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
+:toc:
 
 == TwitterPeople
 
@@ -17,10 +18,14 @@ en la base de datos y si no existe acudirá a Twitter a recuperarlo. Si a su vez
 Twitter creará un Person en base a los atributos que recupera y a partir de entonces
 ya estará disponbile para futuras peticiones.
 
+Un recurso Person se caracteriza por tener los siguientes atributos:
+
+.Person
+include::{snippets}/people/example1/response-fields.adoc[]
 
 == People
 
-Podemos recuperar una lista de Person (People) mediante la invocación de un GET:
+Podemos recuperar una lista de Person mediante la invocación de un GET:
 
 include::{snippets}/people/curl-request.adoc[]
 
@@ -31,17 +36,27 @@ include::{snippets}/people/http-response.adoc[]
 == Person
 
 Para obtener los datos de un Person utilizaremos su nick como identificador (en lugar
-del Id de Twitter):
-
-include::{snippets}/people/person1/response-fields.adoc[]
+del Id de Twitter).
 
 === JSON
 
-include::{snippets}/people/person1/curl-request.adoc[]
+Podemos obtener un Person mediante un JSON
 
-include::{snippets}/people/person1/http-request.adoc[]
+include::{snippets}/people/example1/curl-request.adoc[]
 
-include::{snippets}/people/person1/http-response.adoc[]
+include::{snippets}/people/example1/http-request.adoc[]
+
+el cual nos devolverá un JSON representando el person solicitado
+
+include::{snippets}/people/example1/http-response.adoc[]
+
+=== 404 Not found
+
+Cuando un recurso no existe, obtendremos un status 404
+
+include::{snippets}/people/notfound/curl-request.adoc[]
+include::{snippets}/people/notfound/http-response.adoc[]
+
 
 === HATEOAS
 

@@ -32,7 +32,7 @@ ext {
     gradleWrapperVersion = project.gradleWrapperVersion
 
     // jorge 2
-    springRestdocsVersion = '1.1.0.M1'
+    springRestdocsVersion = '1.1.0.RC1' //''1.1.0.M1'
     snippetsDir = file('build/generated-snippets')
 }
 
@@ -43,6 +43,8 @@ test {
 
 // jorge 3
 integrationTest{
+    outputs.upToDateWhen { false }
+
     outputs.dir snippetsDir
 
     systemProperty 'twitter4j.oauth.consumerKey',"${consumerKey}"
@@ -133,4 +135,14 @@ jar {
     from ("${asciidoctor.outputDir}/html5") {
         into 'static/docs'
     }
+}
+
+assemble {
+    def twitter4j = new File('build/libs/twitter4j.properties')
+    twitter4j.text = """
+oauth.consumerKey=${consumerKey}
+oauth.consumerSecret=${consumerSecret}
+oauth.accessToken=${accessToken}
+oauth.accessTokenSecret=${secretToken}
+    """
 }
