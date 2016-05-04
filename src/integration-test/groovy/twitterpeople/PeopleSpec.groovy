@@ -54,9 +54,9 @@ class PeopleSpec extends BaseSpec {
                 .then()
 
         then:
-        then.assertThat().statusCode(is(200));
-        then.assertThat().content('id', equalTo(username));
-        then.assertThat().content('description', equalTo(description));
+        then.assertThat().statusCode(is(200))
+                .and().content('id', equalTo(username))
+                .and().content('description', equalTo(description));
 
         where:
         document    | username | description

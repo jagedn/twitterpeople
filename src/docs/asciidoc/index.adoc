@@ -46,6 +46,10 @@ include::{snippets}/people/example1/curl-request.adoc[]
 
 include::{snippets}/people/example1/http-request.adoc[]
 
+o si usamos httpi
+
+include::{snippets}/people/example1/httpie-request.adoc[]
+
 el cual nos devolverá un JSON representando el person solicitado
 
 include::{snippets}/people/example1/http-response.adoc[]
