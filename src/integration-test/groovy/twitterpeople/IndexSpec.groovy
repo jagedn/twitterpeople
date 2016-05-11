@@ -16,24 +16,13 @@ class IndexSpec extends BaseSpec {
 
         void "test index"() {
 
-            given:
-            def request = given(documentationSpec)
-                    .accept("application/json")
-                    .filter(document("people",
-                        // podemos sustituir el host en la documentacion o el puerto
-                        preprocessRequest(prettyPrint(),modifyUris().scheme("http").host(HOST).removePort())                     ,
-                        // queremos que nuestra docu sea legible
-                        preprocessResponse(prettyPrint())
-            ))
-            when:
-            def then = request
+            expect:
+            givenRequest( documentBase("people") )
                     .when()
                     .port(8080)
                     .get("/people")
                     .then()
-
-            then:
-            then.assertThat().statusCode(is(200));
+                    .assertThat().statusCode(is(200))
 
         }
 

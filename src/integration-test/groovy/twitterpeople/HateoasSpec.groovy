@@ -17,26 +17,17 @@ class HateoasSpec extends BaseSpec{
 
     void "test with HATEOAS a person #username"() {
 
-        given:
-        def request = given(documentationSpec)
+        expect:
+        given(documentationSpec)
                 .accept("application/hal+json")
-                .filter(document("people-hateoas",
-                preprocessRequest(modifyUris()
-                        .scheme("http")
-                        .host(HOST)
-                        .removePort()),
-                preprocessResponse(prettyPrint()))
-        )
-        when:
-        def then = request
+                .filter(document("people-hateoas", preprocessRequest(modifyUris().scheme("http").host(HOST).removePort()),
+                preprocessResponse(prettyPrint())))
                 .when()
                 .port(8080)
                 .get("/people/jagedn")
                 .then()
-
-        then:
-        then.assertThat().statusCode(is(200));
-        then.assertThat().content('_links.self.href', is('http://localhost:8080/people/jagedn'))
+                .assertThat().statusCode(is(200))
+                .and().content('_links.self.href', is('http://localhost:8080/people/jagedn'))
     }
 
 }

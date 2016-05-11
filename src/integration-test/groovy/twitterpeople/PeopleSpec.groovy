@@ -27,36 +27,32 @@ import static org.springframework.restdocs.snippet.Attributes.key;
 @Integration
 class PeopleSpec extends BaseSpec {
 
+    FieldDescriptor[] fields = [
+            fieldWithPath('id').description('user name'),
+            fieldWithPath('description').description(''),
+            fieldWithPath('followersCount').description('how many followers'),
+            fieldWithPath('friendsCount').description('cuantos amigos'),
+            fieldWithPath('location').description(''),
+            fieldWithPath('dateCreated').description('when was created in our system'),
+    ]
+
+    FieldDescriptor[] relaxedFields = [
+            fieldWithPath('description').description('').attributes(
+                    key('constraints').value('la descripcion sera menor de 30 caracteres')
+            )
+    ]
+
     void "test person #username with #description"() {
 
-        given:
-        FieldDescriptor[] fields = [
-                fieldWithPath('id').description('user name'),
-                fieldWithPath('description').description(''),
-                fieldWithPath('followersCount').description('how many followers'),
-                fieldWithPath('friendsCount').description('how many friends'),
-                fieldWithPath('location').description(''),
-                //fieldWithPath('dateCreated').description('when was created in our system'),
-        ]
-
-        def request = given(documentationSpec)
-                .accept("application/json")
-                .filter(document("people/${document}",
-                preprocessRequest(modifyUris().scheme("http").host(HOST).removePort()),
-                preprocessResponse(prettyPrint()),
-                responseFields(fields))
-        )
-        when:
-        def then = request
-                .when()
-                .port(8080)
-                .get("/people/${username}")
-                .then()
-
-        then:
-        then.assertThat().statusCode(is(200))
-                .and().content('id', equalTo(username))
-                .and().content('description', equalTo(description));
+        expect:
+            givenRequest(
+                    documentBase("people/${document}", responseFields(fields))
+            )
+                    .when().port(8080).get("/people/${username}")
+                    .then()
+                    .assertThat().statusCode(is(200))
+                    .and().content('id', equalTo(username))
+                    .and().content('description', equalTo(description));
 
         where:
         document    | username | description
@@ -66,28 +62,12 @@ class PeopleSpec extends BaseSpec {
 
     void "test person #username with relaxed response fields"() {
 
-        given:
-        FieldDescriptor[] responseFields = [
-                fieldWithPath('description').description('').attributes(
-                        key('constraints').value('la descripcion sera menor de 30 caracteres')
-                )
-        ]
-
-        def request = given(documentationSpec)
-                .accept("application/json")
-                .filter(document("people/relaxed",
-                        preprocessRequest(modifyUris().scheme("http").host(HOST).removePort()),
-                        preprocessResponse(prettyPrint()),
-                        relaxedResponseFields(responseFields)))
-        when:
-        def then = request
-                .when().port(8080).get("/people/${username}").then()
-
-        then:
-        then.assertThat().statusCode(is(200));
-
-        where:
-        username | description
-        'jagedn' | 'Dev As Service'
+        expect:
+            givenRequest(
+                    documentBase("people/relaxed",relaxedResponseFields(relaxedFields))
+            )
+                .when().port(8080).get("/people/jagedn")
+                .then()
+                .assertThat().statusCode(is(200));
     }
 }

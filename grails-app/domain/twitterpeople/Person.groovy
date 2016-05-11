@@ -24,5 +24,5 @@ class Person {
     int friendsCount
     String location
 
-    //Date dateCreated
+    Date dateCreated
 }

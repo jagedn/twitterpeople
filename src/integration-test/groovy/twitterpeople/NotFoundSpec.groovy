@@ -15,28 +15,14 @@ import static org.springframework.restdocs.restassured.operation.preprocess.Rest
 class NotFoundSpec  extends BaseSpec{
 
     void "test person not found"() {
-
-        given:
-
-        def request = given(documentationSpec)
-                .accept("application/json")
-                .filter(document("people/notfound",
-                preprocessRequest(modifyUris()
-                        .scheme("http")
-                        .host(HOST)
-                        .removePort()),
-                preprocessResponse(prettyPrint()))
-        )
-
-        when:
-        def then = request
+        expect:
+        givenRequest( documentBase("people/notfound") )
                 .when()
                 .port(8080)
                 .get("/people/usuario_no_existente_en_twitter")
                 .then()
-
-        then:
-        then.assertThat().statusCode(is(404));
+                .assertThat().statusCode(is(404))
     }
 
 }
+

@@ -137,7 +137,7 @@ jar {
     }
 }
 
-assemble {
+assemble.doLast{
     def twitter4j = new File('build/libs/twitter4j.properties')
     twitter4j.text = """
 oauth.consumerKey=${consumerKey}
